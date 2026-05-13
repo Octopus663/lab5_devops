@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class Hello {
     @GetMapping("/")
     public String index() {
-        return "DevOps Lab is Running!";
+        return "DevOps Lab is Running! ";
     }
 }
