@@ -2,7 +2,7 @@ name: DevOps Lab Pipeline
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "main", "dev", "master" ]
   workflow_dispatch: # Дозволяє запускати вручну кнопкою
 
 jobs:
@@ -48,9 +48,9 @@ jobs:
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ github.ref_name == 'main' && secrets.PROD_HOST || secrets.DEV_HOST }}
-          username: ${{ github.ref_name == 'main' && secrets.PROD_USERNAME || secrets.DEV_USERNAME }}
-          key: ${{ github.ref_name == 'main' && secrets.PROD_SSH_KEY || secrets.DEV_SSH_KEY }}
+          host: ${{ (github.ref_name == 'main' || github.ref_name == 'master') && secrets.PROD_HOST || secrets.DEV_HOST }}
+          username: ${{ (github.ref_name == 'main' || github.ref_name == 'master') && secrets.PROD_USERNAME || secrets.DEV_USERNAME }}
+          key: ${{ (github.ref_name == 'main' || github.ref_name == 'master') && secrets.PROD_SSH_KEY || secrets.DEV_SSH_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/lab5-app:${{ github.ref_name }}
             docker stop app-${{ github.ref_name }} || true
